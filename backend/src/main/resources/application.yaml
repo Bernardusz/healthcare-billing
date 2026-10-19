@@ -26,7 +26,7 @@ spring:
 
   # Jackson JSON Serialization Settings
   jackson:
-    default-property-inclusion: non_null
+    default-property-inclusion: always
 
 # Custom Security & JWT Application Properties
 jwt:
@@ -44,12 +44,21 @@ server:
 logging:
   level:
     root: INFO
-    io.github.bernardusz.template_kotlin: DEBUG
+    io.github.bernardusz.healthcare_billing: ${LOGGING_MODE:INFO}
     org.springframework.security: ${LOGGING_MODE:INFO}
-    org.springframework.security.web.authentication.AnonymousAuthenticationFilter: ${AUTH_MODE:OFF}
-
+    org.springframework.web: ${LOGGING_MODE:INFO}
+    org.springframework.web.reactive: ${LOGGING_MODE:INFO}
+    org.springframework.r2dbc: ${LOGGING_MODE:INFO}
+    io.r2dbc.postgresql: ${LOGGING_MODE:INFO}
 springdoc:
   api-docs:
     enabled: ${SPRING_DOC_API_DOCS_ENABLED:true}
   swagger-ui:
     enabled: ${SPRING_DOC_SWAGGER_UI_ENABLED:true}
+
+app:
+  bootstrap:
+    admin:
+      username: ${APP_BOOTSTRAP_ADMIN_USERNAME}
+      email: ${APP_BOOTSTRAP_ADMIN_EMAIL}
+      password: ${APP_BOOTSTRAP_ADMIN_PASSWORD}

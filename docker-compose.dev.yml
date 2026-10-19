@@ -42,12 +42,15 @@ services:
       SPRING_DOC_SWAGGER_UI_ENABLED: ${SPRING_DOC_SWAGGER_UI_ENABLED}
       SPRING_DEVTOOLS_RESTART_ENABLED: "true"
       JAVA_TOOL_OPTIONS: "-Xms256m -Xmx768m -XX:MaxMetaspaceSize=256m"
+      APP_BOOTSTRAP_ADMIN_USERNAME: ${APP_BOOTSTRAP_ADMIN_USERNAME}
+      APP_BOOTSTRAP_ADMIN_EMAIL: ${APP_BOOTSTRAP_ADMIN_EMAIL}
+      APP_BOOTSTRAP_ADMIN_PASSWORD: ${APP_BOOTSTRAP_ADMIN_PASSWORD}
     volumes:
       # 🚀 BIND MOUNT: Mounts your host backend source directly inside the container
       - ./backend:/app
       # Cache Gradle dependencies on host so restarts are fast
       - ~/.gradle:/root/.gradle
-    command: ./gradlew bootRun -t --no-daemon
+    command: ./gradlew bootRun --no-daemon
     depends_on:
       postgres:
         condition: service_healthy

@@ -1,1 +1,1 @@
-rootProject.name = "healtcare-billing"
+rootProject.name = "healtcare_billing"

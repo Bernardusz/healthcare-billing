@@ -1,0 +1,26 @@
+info:
+  name: Update user's role
+  type: http
+  seq: 5
+
+http:
+  method: PUT
+  url: http://localhost:8080/api/v1/users/:userId/role
+  params:
+    - name: userId
+      value: "2"
+      type: path
+  body:
+    type: json
+    data: |-
+      {
+        "role": "ROLE_AUDITOR"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false

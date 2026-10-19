@@ -56,3 +56,11 @@ tasks.withType<Test> {
 	useJUnitPlatform()
 }
 
+tasks.named<org.springframework.boot.gradle.tasks.run.BootRun>("bootRun") {
+	// Keeps class directories in sync with Spring Boot DevTools during continuous builds
+	sourceResources(sourceSets["main"])
+
+	// Pass devtools properties directly to the JVM execution thread
+	systemProperty("spring.devtools.restart.enabled", "true")
+}
+
