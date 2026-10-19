@@ -1,0 +1,55 @@
+spring:
+  application:
+    name: healthcare-billing
+  devtools:
+    restart:
+      enabled: true
+      poll-interval: 1000ms
+      quiet-period: 700ms
+
+  # R2DBC Reactive Database Configuration
+  r2dbc:
+    url: r2dbc:postgresql://${DATABASE_HOST:postgres}:5432/${DATABASE_NAME}
+    username: ${DATABASE_USER}
+    password: ${DATABASE_PASSWORD}
+    pool:
+      enabled: true
+      initial-size: 10
+      max-size: 30
+      max-idle-time: 30m
+
+  # Automatic Schema Initialization (Development Only)
+  sql:
+    init:
+      mode: always
+      schema-locations: classpath:schema.sql
+
+  # Jackson JSON Serialization Settings
+  jackson:
+    default-property-inclusion: non_null
+
+# Custom Security & JWT Application Properties
+jwt:
+  secret: ${JWT_SECRET}
+  access-token-expiration-ms: 900000        # 15 minutes
+  refresh-token-expiration-ms: 604800000    # 7 days
+
+# Server Configuration
+server:
+  port: 8080
+  error:
+    include-message: ${MESSAGE_MODE}
+
+# Logging Configuration
+logging:
+  level:
+    root: INFO
+    io.github.bernardusz.template_kotlin: DEBUG
+    org.springframework.security: ${LOGGING_MODE:INFO}
+    org.springframework.security.web.authentication.AnonymousAuthenticationFilter: ${AUTH_MODE:OFF}
+
+springdoc:
+  api-docs:
+    enabled: ${SPRING_DOC_API_DOCS_ENABLED:true}
+  swagger-ui:
+    enabled: ${SPRING_DOC_SWAGGER_UI_ENABLED:true}
