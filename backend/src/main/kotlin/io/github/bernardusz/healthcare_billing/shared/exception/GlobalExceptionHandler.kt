@@ -14,6 +14,7 @@ import io.github.bernardusz.healthcare_billing.shared.exception.exceptions.exist
 import io.github.bernardusz.healthcare_billing.shared.exception.exceptions.missing.NotFoundException
 import io.jsonwebtoken.ExpiredJwtException
 import org.slf4j.LoggerFactory
+import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.security.authorization.AuthorizationDeniedException
 
 @RestControllerAdvice
@@ -86,6 +87,31 @@ class GlobalExceptionHandler {
             timestamp = Instant.now()
         )
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse)
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException::class)
+    fun handleDataIntegrityViolation(ex: DataIntegrityViolationException): ResponseEntity<ErrorResponse> {
+        val message = ex.message ?: ""
+        val (userMessage, status) = when {
+            message.contains("uk_users_username") ->
+                "Username is already in use" to HttpStatus.CONFLICT
+            message.contains("uk_users_email") ->
+                "Email is already in use" to HttpStatus.CONFLICT
+            message.contains("chk_user_role") ->
+                "Invalid user role provided" to HttpStatus.BAD_REQUEST
+            message.contains("uk_patients_patient_number") ->
+                "Patient number is already in use" to HttpStatus.CONFLICT
+            else ->
+                "A database constraint violation occurred" to HttpStatus.CONFLICT
+        }
+
+        val errorResponse = ErrorResponse(
+            message = userMessage,
+            code = status.value(),
+            timestamp = Instant.now()
+        )
+
+        return ResponseEntity.status(status).body(errorResponse)
     }
 
     @ExceptionHandler(InternalServerException::class)

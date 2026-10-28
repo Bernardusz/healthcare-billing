@@ -1,6 +1,5 @@
 package io.github.bernardusz.healthcare_billing.user
 
-import io.github.bernardusz.healthcare_billing.shared.exception.exceptions.existed.UserAlreadyExistsException
 import io.github.bernardusz.healthcare_billing.shared.exception.exceptions.external.InvalidPasswordException
 import io.github.bernardusz.healthcare_billing.shared.exception.exceptions.missing.UserNotFoundException
 import io.github.bernardusz.healthcare_billing.shared.utils.encodeNonNull
@@ -84,15 +83,6 @@ class UserService(
         ?: throw UserNotFoundException(
             "User with ID '$id' not found."
         )
-
-        if (request.username != existingUser.username && userRepository.existsByUsername(request.username)) {
-            throw UserAlreadyExistsException("Username '${request.username}' is already in use")
-        }
-
-        // Check if email is being changed AND if the new email exists on another account
-        if (request.email != existingUser.email && userRepository.existsByEmail(request.email)) {
-            throw UserAlreadyExistsException("Email '${request.email}' is already in use")
-        }
 
         val updatedUser = existingUser.copy(
             username = request.username,
