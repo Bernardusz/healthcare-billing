@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
 import java.time.Instant
 import javax.naming.AuthenticationException
-import io.github.bernardusz.healthcare_billing.shared.exception.exceptions.existed.AlreadyExistsException
 import io.github.bernardusz.healthcare_billing.shared.exception.exceptions.missing.NotFoundException
 import io.jsonwebtoken.ExpiredJwtException
 import org.slf4j.LoggerFactory
@@ -146,19 +145,6 @@ class GlobalExceptionHandler {
     ): ResponseEntity<ErrorResponse> {
         val errorResponse = ErrorResponse(
             message = ex.message ?: "Invalid password",
-            code = ex.code,
-            timestamp = Instant.now()
-        )
-
-        return ResponseEntity.status(ex.code).body(errorResponse)
-    }
-
-    @ExceptionHandler(AlreadyExistsException::class)
-    fun handleAlreadyExistsException(
-        ex: AlreadyExistsException
-    ): ResponseEntity<ErrorResponse> {
-        val errorResponse = ErrorResponse(
-            message = ex.message ?: "User already exists",
             code = ex.code,
             timestamp = Instant.now()
         )

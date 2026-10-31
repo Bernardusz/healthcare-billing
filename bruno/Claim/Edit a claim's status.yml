@@ -1,0 +1,27 @@
+info:
+  name: Edit a claim's status
+  type: http
+  seq: 5
+
+http:
+  method: PUT
+  url: http://localhost:8080/api/v1/claims/status/:id
+  params:
+    - name: id
+      value: "1"
+      type: path
+  body:
+    type: json
+    data: |-
+      {
+        "status": "FLAGGED",
+        "flaggedForAudit": true
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false

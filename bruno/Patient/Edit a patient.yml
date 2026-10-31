@@ -1,0 +1,31 @@
+info:
+  name: Edit a patient
+  type: http
+  seq: 4
+
+http:
+  method: PUT
+  url: http://localhost:8080/api/v1/patients/:id
+  params:
+    - name: id
+      value: "1"
+      type: path
+  body:
+    type: json
+    data: |-
+      {
+        "patientNumber": "PAT-10001",
+        "firstName": "Stanislaus",
+        "lastName": "Christian",
+        "dateOfBirth": "2010-06-16",
+        "insuranceProvider": "MyProvider",
+        "policyNumber": "POL-88291029"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false

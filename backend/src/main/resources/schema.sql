@@ -1,11 +1,14 @@
 CREATE TABLE IF NOT EXISTS users (
-    id BIGSERIAL PRIMARY KEY,
-    username VARCHAR(100) NOT NULL UNIQUE,
-    email VARCHAR(255) NOT NULL UNIQUE,
-    password VARCHAR(255) NOT NULL,
-    role VARCHAR(50) NOT NULL DEFAULT 'ROLE_BILLER',
-    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT chk_user_role CHECK (role IN ('ROLE_ADMIN', 'ROLE_AUDITOR', 'ROLE_BILLER'))
+     id BIGSERIAL PRIMARY KEY,
+     username VARCHAR(100) NOT NULL,
+     email VARCHAR(255) NOT NULL,
+     password VARCHAR(255) NOT NULL,
+     role VARCHAR(50) NOT NULL DEFAULT 'ROLE_BILLER',
+     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+
+     CONSTRAINT uk_users_username UNIQUE (username),
+     CONSTRAINT uk_users_email UNIQUE (email),
+     CONSTRAINT chk_user_role CHECK (role IN ('ROLE_ADMIN', 'ROLE_AUDITOR', 'ROLE_BILLER'))
 );
 
 CREATE TABLE IF NOT EXISTS refresh_tokens (
@@ -34,13 +37,15 @@ CREATE INDEX IF NOT EXISTS idx_refresh_tokens_cleanup ON refresh_tokens(expires_
 -- -----------------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS patients (
     id BIGSERIAL PRIMARY KEY,
-    patient_number VARCHAR(50) NOT NULL UNIQUE,
+    patient_number VARCHAR(50) NOT NULL,
     first_name VARCHAR(100) NOT NULL,
     last_name VARCHAR(100) NOT NULL,
     date_of_birth DATE NOT NULL,
     insurance_provider VARCHAR(100) NOT NULL,
     policy_number VARCHAR(100) NOT NULL,
-    created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+    created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT uk_patients_patient_number UNIQUE (patient_number)
 );
 
 -- -----------------------------------------------------------------------------
@@ -48,7 +53,7 @@ CREATE TABLE IF NOT EXISTS patients (
 -- -----------------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS medical_claims (
     id BIGSERIAL PRIMARY KEY,
-    claim_number VARCHAR(50) NOT NULL UNIQUE,
+    claim_number VARCHAR(50) NOT NULL,
     patient_id BIGINT NOT NULL REFERENCES patients(id) ON DELETE CASCADE,
     biller_id BIGINT NOT NULL REFERENCES users(id),
 
@@ -62,7 +67,8 @@ CREATE TABLE IF NOT EXISTS medical_claims (
     created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
-    CONSTRAINT chk_claim_status CHECK (status IN ('PENDING', 'APPROVED', 'REJECTED', 'FLAGGED', 'UNDER_AUDIT'))
+    CONSTRAINT chk_claim_status CHECK (status IN ('PENDING', 'APPROVED', 'REJECTED', 'FLAGGED', 'UNDER_AUDIT')),
+    CONSTRAINT chk_medical_claims_claim_number UNIQUE (claim_number)
 );
 
 -- -----------------------------------------------------------------------------
@@ -82,17 +88,3 @@ CREATE TABLE IF NOT EXISTS audit_logs (
 CREATE INDEX IF NOT EXISTS idx_claims_status ON medical_claims(status);
 CREATE INDEX IF NOT EXISTS idx_claims_flagged ON medical_claims(flagged_for_audit);
 CREATE INDEX IF NOT EXISTS idx_claims_patient ON medical_claims(patient_id);
-
-ALTER TABLE users
-    DROP CONSTRAINT IF EXISTS users_username_key,
-    DROP CONSTRAINT IF EXISTS users_email_key;
-
-ALTER TABLE users
-    ADD CONSTRAINT uk_users_username UNIQUE (username),
-    ADD CONSTRAINT uk_users_email UNIQUE (email);
-
-ALTER TABLE patients
-    DROP CONSTRAINT IF EXISTS patients_patient_number_key;
-
-ALTER TABLE patients
-    ADD CONSTRAINT uk_patients_patient_number UNIQUE (patient_number);

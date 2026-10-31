@@ -1,0 +1,30 @@
+info:
+  name: Edit a claim
+  type: http
+  seq: 4
+
+http:
+  method: PUT
+  url: http://localhost:8080/api/v1/claims/:id
+  params:
+    - name: id
+      value: "1"
+      type: path
+  body:
+    type: json
+    data: |-
+      {
+        "claimNumber": "CLM-2026-011",
+        "patientId": 3,
+        "icdCode": "E11.9",
+        "cptCode": "99214",
+        "amount": 175.50
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false

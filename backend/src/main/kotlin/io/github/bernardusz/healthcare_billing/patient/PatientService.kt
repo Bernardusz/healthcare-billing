@@ -6,7 +6,7 @@ import io.github.bernardusz.healthcare_billing.patient.dto.PatientSaveRequest
 import io.github.bernardusz.healthcare_billing.patient.dto.toDetailResponse
 import io.github.bernardusz.healthcare_billing.patient.dto.toEntity
 import io.github.bernardusz.healthcare_billing.patient.dto.toListResponse
-import io.github.bernardusz.healthcare_billing.shared.exception.exceptions.missing.PatientNotFound
+import io.github.bernardusz.healthcare_billing.shared.exception.exceptions.missing.PatientNotFoundException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import org.springframework.stereotype.Service
@@ -48,7 +48,7 @@ class PatientService(
     suspend fun getPatientById(id: Long): PatientDetailResponse {
         val patientData: Patient = patientRepository.findById(
             id
-        ) ?: throw PatientNotFound("Patient with id $id not found")
+        ) ?: throw PatientNotFoundException("Patient with id $id not found")
 
         return patientData.toDetailResponse()
     }
@@ -60,7 +60,7 @@ class PatientService(
     ): PatientDetailResponse {
         val existingPatient: Patient = patientRepository.findById(
             id
-        ) ?: throw PatientNotFound("Patient with id $id not found")
+        ) ?: throw PatientNotFoundException("Patient with id $id not found")
 
         val updatedPatient: Patient = existingPatient.copy(
             patientNumber = patient.patientNumber,

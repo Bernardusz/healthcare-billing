@@ -1,6 +1,6 @@
 package io.github.bernardusz.healthcare_billing.shared.exception.exceptions.missing
 
-class PatientNotFound (
+class ClaimNotFoundException(
     message: String,
     cause: Throwable? = null,
     code: Int = 404

@@ -17,6 +17,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseCookie
 import org.springframework.http.ResponseEntity
 import org.springframework.http.server.reactive.ServerHttpResponse
+import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.CookieValue
 import org.springframework.web.bind.annotation.GetMapping
@@ -136,15 +137,12 @@ class AuthController(
     }
 
     // The only method in which users need to be authenticated
+    @PreAuthorize("isAuthenticated()")
     @PostMapping("/logout-all")
     suspend fun logoutFromAllDevices(
         @AuthenticationPrincipal user: UserSecurity,
         response: ServerHttpResponse
     ): ResponseEntity<Void> {
-        if (user == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build()
-        }
-
         refreshTokenService.revokeAllUserSessions(
             userId = user.id,
         )
