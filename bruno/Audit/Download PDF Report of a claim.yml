@@ -1,0 +1,20 @@
+info:
+  name: Download PDF Report of a claim
+  type: http
+  seq: 6
+
+http:
+  method: GET
+  url: http://localhost:8080/api/v1/audit/pdf/:id
+  params:
+    - name: id
+      value: "3"
+      type: path
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false

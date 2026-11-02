@@ -22,7 +22,7 @@ data class Claim(
     val icdCode: String,
     val cptCode: String,
     val amount: BigDecimal,
-    val status: ClaimStatus = ClaimStatus.PENDING,
+    val status: String = ClaimStatus.PENDING.name,
     val flaggedForAudit: Boolean = false,
     val createdAt: Instant = Instant.now(),
     val updatedAt: Instant = Instant.now(),

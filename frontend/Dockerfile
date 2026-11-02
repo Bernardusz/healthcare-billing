@@ -6,7 +6,7 @@ COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 RUN corepack enable
 RUN corepack prepare pnpm@latest --activate
 
-RUN pnpm install
+RUN pnpm install --unsafe-perm
 
 COPY . .
 

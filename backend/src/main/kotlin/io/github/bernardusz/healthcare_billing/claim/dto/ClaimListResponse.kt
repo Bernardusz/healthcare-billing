@@ -17,6 +17,6 @@ fun Claim.toListResponse(): ClaimListResponse = ClaimListResponse(
     claimNumber = claimNumber,
     patientId = patientId,
     billerId = billerId,
-    status = status,
+    status = ClaimStatus.valueOf(status),
     flaggedForAudit = flaggedForAudit,
 )

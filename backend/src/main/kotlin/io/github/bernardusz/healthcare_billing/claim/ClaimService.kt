@@ -7,6 +7,7 @@ import io.github.bernardusz.healthcare_billing.claim.dto.ClaimStatusUpdateReques
 import io.github.bernardusz.healthcare_billing.claim.dto.toDetailResponse
 import io.github.bernardusz.healthcare_billing.claim.dto.toDomain
 import io.github.bernardusz.healthcare_billing.claim.dto.toListResponse
+import io.github.bernardusz.healthcare_billing.claim.repository.ClaimRepository
 import io.github.bernardusz.healthcare_billing.shared.exception.exceptions.missing.ClaimNotFoundException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -27,7 +28,7 @@ class ClaimService(
             claimSaveRequest.toDomain(
                 billerId
             )
-        );
+        )
 
         return claim.id
             ?: throw IllegalStateException("Claim with ID ${claim.id} was not created")
@@ -92,7 +93,7 @@ class ClaimService(
             ?: throw ClaimNotFoundException(message = "Claim with ID $claimId was not found")
 
         val updatedClaim = claim.copy(
-            status = claimStatusUpdateRequest.status,
+            status = claimStatusUpdateRequest.status.name,
             flaggedForAudit = claimStatusUpdateRequest.flaggedForAudit
         )
 

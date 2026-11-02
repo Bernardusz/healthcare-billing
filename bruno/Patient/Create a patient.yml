@@ -10,12 +10,12 @@ http:
     type: json
     data: |-
       {
-        "patientNumber": "PAT-10001",
-        "firstName": "Stanislaus",
-        "lastName": "Christian",
+        "patientNumber": "PAT-10002",
+        "firstName": "Joseph",
+        "lastName": "Karl",
         "dateOfBirth": "2010-06-16",
         "insuranceProvider": "MyProvider",
-        "policyNumber": "POL-88291029"
+        "policyNumber": "POL-88291030"
       }
   auth: inherit
 

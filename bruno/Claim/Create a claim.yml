@@ -10,8 +10,8 @@ http:
     type: json
     data: |-
       {
-        "claimNumber": "CLM-2026-012",
-        "patientId": 3,
+        "claimNumber": "CLM-2026-016",
+        "patientId": 4,
         "icdCode": "E11.9",
         "cptCode": "99214",
         "amount": 175.50
